@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820852500044",
+    "project_id": "demarcotask",
+    "storage_bucket": "demarcotask.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820852500044:android:17a6ba00cb7686d137f6e9",
+        "android_client_info": {
+          "package_name": "com.demarcotask.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo6CloijgK3B89GPqR-xvmGDKFYUEE6nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
