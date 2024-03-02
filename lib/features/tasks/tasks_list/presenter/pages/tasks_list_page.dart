@@ -1,11 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
@@ -27,9 +24,6 @@ import '../state/task_list_bloc_state.dart';
 class TasksListPage extends StatelessWidget {
   TasksListPage({super.key});
 
-  Future<void> getData() async {
-    //
-  }
   final bloc = TasksListBloc(
     authRepository: AuthRepository(
       dao: AuthDao(),
@@ -62,7 +56,10 @@ class TasksListPage extends StatelessWidget {
                 ),
                 child: BlocBuilder<TasksListBloc, ITaskListBlocState>(
                   bloc: bloc,
+                  buildWhen: (previous, current) =>
+                      current is IGetTasksListBlocState,
                   builder: (context, state) {
+                    print("EAI1");
                     return switch (state) {
                       SuccessTasksListBlocState() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,103 +81,93 @@ class TasksListPage extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: 16),
-                            CarouselTasks(
-                              listTasks: bloc.selectThreeElements(),
+                            BlocBuilder(
+                              bloc: bloc,
+                              buildWhen: (previous, current) =>
+                                  current is IChangeItemTaskListBlocState,
+                              builder: (context, state) {
+                                return CarouselTasks(
+                                  listTasks: bloc.selectThreeElements(),
+                                );
+                              },
                             ),
-                            const Text(
-                              "Tarefas",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  state is EmptyTasksListBlcoState
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 32),
-                                          child: Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.list,
-                                                  size: 55,
-                                                ),
-                                                const Text(
-                                                  "Lista vazia",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const Text(
-                                                  "Adicione uma tarefa para começar",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                TextButton.icon(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AddTaskPage(),
-                                                      ),
-                                                    ).then((value) {
-                                                      if (value != null &&
-                                                          value == true) {
-                                                        bloc.add(
-                                                            GetTasksListEvent());
-                                                      }
-                                                    });
-                                                  },
-                                                  icon: const Icon(Icons.add),
-                                                  label: const Text(
-                                                    "Adicionar Tarefa",
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: ListView.builder(
-                                            itemCount:
-                                                bloc.filterTasks.length + 1,
-                                            itemBuilder: (context, index) =>
-                                                index == bloc.filterTasks.length
-                                                    ? TextButton.icon(
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  AddTaskPage(),
+                            BlocBuilder(
+                              bloc: bloc,
+                              buildWhen: (previous, current) =>
+                                  current is ITaskItemListBlocState ||
+                                  current is IChangeItemTaskListBlocState,
+                              builder: (context, state) {
+                                print("eai");
+                                return Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Tarefas",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            state is EmptyTasksListBlcoState
+                                                ? const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 32),
+                                                    child: Center(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.list,
+                                                            size: 55,
+                                                          ),
+                                                          Text(
+                                                            "Lista vazia",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 24,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            "Adicione uma tarefa para começar",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontSize: 16,
                                                             ),
-                                                          ).then((value) {
-                                                            if (value != null &&
-                                                                value == true) {
-                                                              bloc.add(
-                                                                  GetTasksListEvent());
-                                                            }
-                                                          });
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.add),
-                                                        label: const Text(
-                                                            "Adicionar Tarefa"),
-                                                      )
-                                                    : TaskItem(
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Expanded(
+                                                    child: ListView.builder(
+                                                      itemCount: bloc
+                                                          .filterTasks.length,
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              TaskItem(
                                                         task: bloc
                                                             .filterTasks[index],
+                                                        onDismissed: (p0) {
+                                                          bloc.add(
+                                                            DeleteTaskListEvent(
+                                                              task:
+                                                                  bloc.filterTasks[
+                                                                      index],
+                                                            ),
+                                                          );
+                                                        },
                                                         onChagend: (p0) {
                                                           bloc.add(
                                                             SelectedTaskListEvent(
@@ -190,10 +177,15 @@ class TasksListPage extends StatelessWidget {
                                                           );
                                                         },
                                                       ),
-                                          ),
+                                                    ),
+                                                  ),
+                                          ],
                                         ),
-                                ],
-                              ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -209,31 +201,83 @@ class TasksListPage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: BlocBuilder(
-        bloc: bloc,
-        builder: (context, state) {
-          return ElevatedButton.icon(
-            onPressed: !bloc.isOkDone
-                ? null
-                : () {
-                    bloc.add(DoneTasksListEvent());
-                  },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: ButtonsTasksList(bloc: bloc),
+    );
+  }
+}
+
+class ButtonsTasksList extends StatelessWidget {
+  const ButtonsTasksList({
+    super.key,
+    required this.bloc,
+  });
+
+  final TasksListBloc bloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: bloc,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddTaskPage(),
+                    ),
+                  ).then((value) {
+                    if (value != null) {
+                      bloc.add(AddTaskListEvent(task: value));
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                label: const Text(
+                  "Adicionar",
+                ),
+                icon: const Icon(Icons.add),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              const SizedBox(width: 8),
+              ElevatedButton.icon(
+                onPressed: !bloc.isOkDone
+                    ? null
+                    : () {
+                        bloc.add(DoneTasksListEvent());
+                      },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                label: const Text(
+                  "Concluir",
+                ),
+                icon: const Icon(Icons.check),
               ),
-            ),
-            label: const Text(
-              "Concluir",
-            ),
-            icon: const Icon(Icons.check),
-          );
-        },
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -399,39 +443,53 @@ class TaskItem extends StatelessWidget {
     super.key,
     required this.onChagend,
     required this.task,
+    required this.onDismissed,
   });
   final TaskModel task;
   final void Function(bool?) onChagend;
+  final void Function(DismissDirection)? onDismissed;
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      enabled: task.isDone == false,
-      value: task.isDone! ? true : task.isChecked,
-      onChanged: onChagend,
-      title: Text(
-        task.title!,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+    return Dismissible(
+      key: Key(task.id!),
+      onDismissed: onDismissed,
+      direction: DismissDirection.startToEnd,
+      background: Container(
+        color: Theme.of(context).colorScheme.primary,
+        child: const Align(
+          alignment: Alignment(-0.9, 0),
+          child: Icon(Icons.delete, color: Colors.white),
         ),
       ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            task.date!,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+      child: CheckboxListTile(
+        enabled: task.isDone == false,
+        value: task.isDone! ? true : task.isChecked,
+        onChanged: onChagend,
+        title: Text(
+          task.title!,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              task.date!,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-          TaskStatus(
-            isDone: task.isDone!,
-          ),
-        ],
+            TaskStatus(
+              isDone: task.isDone!,
+            ),
+          ],
+        ),
       ),
     );
   }

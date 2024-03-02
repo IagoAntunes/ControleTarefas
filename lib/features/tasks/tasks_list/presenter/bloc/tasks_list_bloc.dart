@@ -44,7 +44,6 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
                 }
               }
             }
-            print("OLa");
             if (_listTasks.isEmpty) {
               emit(EmptyTasksListBlcoState());
             } else {
@@ -52,6 +51,21 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
             }
           } else {
             emit(EmptyTasksListBlcoState());
+          }
+        }
+      }
+    });
+    on<DeleteTaskListEvent>((event, emit) async {
+      _listTasks.removeWhere((element) => element.id == event.task.id);
+      filterTasks.removeWhere((element) => element.id == event.task.id);
+      final resultUser = await authRepository.getUser();
+      if (resultUser is SuccessServiceState) {
+        final result = await repository.deleteTask(resultUser.data, event.task);
+        if (result is SuccessServiceState) {
+          if (_listTasks.isEmpty) {
+            emit(FailureTasksListBlocState());
+          } else {
+            emit(SuccessTasksListBlocState());
           }
         }
       }
@@ -68,7 +82,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       } else {
         isOkDone = true;
       }
-      emit(SuccessTasksListBlocState());
+      emit(SelectedTaskListBlocState());
     });
     on<DoneTasksListEvent>((event, emit) async {
       for (var element in _listTasks) {
@@ -95,7 +109,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
           if (_listTasks.isEmpty) {
             emit(EmptyTasksListBlcoState());
           } else {
-            emit(SuccessTasksListBlocState());
+            emit(DoneTaskListBlocState());
           }
         }
       }
@@ -114,6 +128,12 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       } else {
         emit(SuccessTasksListBlocState());
       }
+    });
+    on<AddTaskListEvent>((event, emit) {
+      _listTasks.add(event.task);
+      filterTasks.add(event.task);
+
+      emit(SuccessTasksListBlocState());
     });
     add(GetTasksListEvent());
   }

@@ -13,6 +13,8 @@ abstract class ITasksListFirebaseService {
       UserModel user, List<TaskModel> listTasks);
 
   Future<IServiceState> getImages(UserModel user);
+
+  Future<IServiceState> deleteTask(UserModel user, TaskModel task);
 }
 
 class TasksListFirebaseService extends ITasksListFirebaseService {
@@ -62,6 +64,19 @@ class TasksListFirebaseService extends ITasksListFirebaseService {
         listImages.add({'task': item.name, 'b64': base64Encode(list)});
       }
       return SuccessServiceState<List<Map<String, dynamic>>>(data: listImages);
+    } catch (e) {
+      return FailureServiceState(message: 'Erro');
+    }
+  }
+
+  @override
+  Future<IServiceState> deleteTask(UserModel user, TaskModel task) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      await firestore.collection('tasks').doc(user.uid).update({
+        'listTasks': FieldValue.arrayRemove([task.toMap()]),
+      });
+      return SuccessServiceState(data: '');
     } catch (e) {
       return FailureServiceState(message: 'Erro');
     }

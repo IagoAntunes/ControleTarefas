@@ -28,9 +28,7 @@ class AddTaskFirebaseService extends IAddTaskFirebaseService {
         await ref
             .child(imagePath)
             .putData(base64.decode(task.image!))
-            .then((p0) {
-          print(p0.toString());
-        });
+            .then((p0) {});
         await docRef.update({
           'listTasks': FieldValue.arrayUnion([
             task.toMap(),
@@ -41,9 +39,7 @@ class AddTaskFirebaseService extends IAddTaskFirebaseService {
         await ref
             .child(imagePath)
             .putData(base64.decode(task.image!))
-            .then((p0) {
-          print(p0.toString());
-        });
+            .then((p0) {});
         await docRef.set({
           'listTasks': [
             task.toMap(),

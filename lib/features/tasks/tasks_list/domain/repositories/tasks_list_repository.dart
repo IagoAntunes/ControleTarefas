@@ -6,6 +6,8 @@ import '../../../../../core/models/user_model.dart';
 
 abstract class ITasksListRepository {
   Future<IServiceState> getTasks(UserModel user);
+  Future<IServiceState> deleteTask(UserModel user, TaskModel task);
+
   Future<IServiceState> getImages(UserModel user);
   Future<IServiceState> completeTasks(
     UserModel user,
@@ -32,5 +34,10 @@ class TasksListRepository extends ITasksListRepository {
   @override
   Future<IServiceState> getImages(UserModel user) {
     return service.getImages(user);
+  }
+
+  @override
+  Future<IServiceState> deleteTask(UserModel user, TaskModel task) {
+    return service.deleteTask(user, task);
   }
 }

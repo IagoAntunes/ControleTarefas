@@ -51,7 +51,29 @@ class AddTaskPage extends StatelessWidget {
                 content: Text("Sucesso"),
               ),
             );
-            Navigator.pop(context, true);
+            Navigator.pop(context);
+            Navigator.pop(context, state.task);
+          } else if (state is LoadingAddTaskListener) {
+            showDialog(
+              context: context,
+              builder: (context) => const Dialog(
+                child: IntrinsicHeight(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 16),
+                          Text("Adicionando Tarefa")
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
           }
         },
         listenWhen: (context, state) => state is IAddTaskListeners,
@@ -168,7 +190,15 @@ class AddTaskPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_formTask.currentState!.validate()) {
-            bloc.add(AddTaskEvent(nameTask: taskController.text));
+            if (bloc.taskModel.image != null) {
+              bloc.add(AddTaskEvent(nameTask: taskController.text));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Imagem obrigatoria"),
+                ),
+              );
+            }
           }
         },
         child: const Icon(Icons.add),

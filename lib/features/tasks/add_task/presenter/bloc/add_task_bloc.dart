@@ -23,15 +23,16 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
     });
     on<SelectImageEvent>(
       (event, emit) async {
-        String? _image = await AppUtils.pickImage(ImageSource.camera);
-        if (_image != null) {
-          taskModel.image = _image;
+        String? image = await AppUtils.pickImage(ImageSource.camera);
+        if (image != null) {
+          taskModel.image = image;
           emit(AddedImageTaskState());
         }
       },
     );
     on<AddTaskEvent>(
       (event, emit) async {
+        emit(LoadingAddTaskListener());
         taskModel.title = event.nameTask;
         final result = await authRepository.getUser();
         if (result is SuccessServiceState<UserModel>) {
@@ -39,7 +40,7 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
           taskModel.id = const Uuid().v1();
           final result2 = await repository.addTask(taskModel, user);
           if (result2 is SuccessServiceState) {
-            emit(SuccessAddTaskListener());
+            emit(SuccessAddTaskListener(task: taskModel));
           } else {
             //
           }
