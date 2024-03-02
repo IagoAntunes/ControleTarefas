@@ -1,3 +1,5 @@
+import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
+
 abstract class ITaskListBlocState {}
 
 class IdleTaskListBlocState extends ITaskListBlocState {
@@ -9,11 +11,12 @@ abstract class IGetTasksListBlocState extends ITaskListBlocState {}
 
 class LoadingTasksListBlocState extends IGetTasksListBlocState {}
 
-class FailureTasksListBlocState extends IGetTasksListBlocState {}
+class FailureTasksListBlocState extends IGetTasksListBlocState {
+  FailureTasksListBlocState({required this.failureState});
+  FailureServiceState failureState;
+}
 
 class SuccessTasksListBlocState extends IGetTasksListBlocState {}
-
-class EmptyTasksListBlcoState extends SuccessTasksListBlocState {}
 
 class EmptyFilterTasksListBlocState extends SuccessTasksListBlocState {}
 

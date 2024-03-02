@@ -44,15 +44,15 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
                 }
               }
             }
-            if (_listTasks.isEmpty) {
-              emit(EmptyTasksListBlcoState());
-            } else {
-              emit(SuccessTasksListBlocState());
-            }
+            emit(SuccessTasksListBlocState());
           } else {
-            emit(EmptyTasksListBlcoState());
+            emit(SuccessTasksListBlocState());
           }
+        } else if (data is FailureServiceState) {
+          emit(FailureTasksListBlocState(failureState: data));
         }
+      } else if (result is FailureServiceState) {
+        emit(FailureTasksListBlocState(failureState: result));
       }
     });
     on<DeleteTaskListEvent>((event, emit) async {
@@ -62,11 +62,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       if (resultUser is SuccessServiceState) {
         final result = await repository.deleteTask(resultUser.data, event.task);
         if (result is SuccessServiceState) {
-          if (_listTasks.isEmpty) {
-            emit(FailureTasksListBlocState());
-          } else {
-            emit(SuccessTasksListBlocState());
-          }
+          emit(SuccessTasksListBlocState());
         }
       }
     });
@@ -106,11 +102,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
           } else {
             isOkDone = true;
           }
-          if (_listTasks.isEmpty) {
-            emit(EmptyTasksListBlcoState());
-          } else {
-            emit(DoneTaskListBlocState());
-          }
+          emit(SuccessTasksListBlocState());
         }
       }
     });
@@ -123,11 +115,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
         ),
       );
 
-      if (filterTasks.isEmpty) {
-        emit(EmptyTasksListBlcoState());
-      } else {
-        emit(SuccessTasksListBlocState());
-      }
+      emit(SuccessTasksListBlocState());
     });
     on<AddTaskListEvent>((event, emit) {
       _listTasks.add(event.task);

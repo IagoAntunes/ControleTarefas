@@ -17,6 +17,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
   }) : super(LoginAuthOptionState()) {
     on<ChangeOptionAuthBlocEvent>((event, emit) {
       if (event.authOption == AuthOption.login) {
+        print("Oi");
         emit(LoginAuthOptionState());
       } else {
         emit(RegisterAuthOptionState());
@@ -35,7 +36,6 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
             uid: result.data.user!.uid, email: result.data.user!.email!);
         await _storeUser(user);
         emit(SuccessAuthListener(authOption: state.authOption));
-        emit(LoggedLoginState());
       } else if (result is FailureServiceState) {
         emit(
           FailureAuthListener(

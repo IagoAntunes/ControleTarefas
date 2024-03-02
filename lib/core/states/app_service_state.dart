@@ -13,3 +13,7 @@ class FailureServiceState extends IServiceState {
     required this.message,
   });
 }
+
+class NoConnectionFailureServiceState extends FailureServiceState {
+  NoConnectionFailureServiceState({required super.message});
+}

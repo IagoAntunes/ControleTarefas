@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
+          debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
           home: child,
         );

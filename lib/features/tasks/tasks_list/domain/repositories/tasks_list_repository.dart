@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
@@ -21,8 +22,13 @@ class TasksListRepository extends ITasksListRepository {
     required this.service,
   });
   @override
-  Future<IServiceState> getTasks(UserModel user) {
-    return service.getTasks(user);
+  Future<IServiceState> getTasks(UserModel user) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      return NoConnectionFailureServiceState(message: 'Sem conexão');
+    } else {
+      return service.getTasks(user);
+    }
   }
 
   @override

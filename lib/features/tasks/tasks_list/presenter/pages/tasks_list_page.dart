@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,7 @@ class TasksListPage extends StatelessWidget {
             const HeadListTasks(),
             Expanded(
               child: Container(
+                width: double.infinity,
                 padding: const EdgeInsets.symmetric(
                   vertical: 16,
                   horizontal: 16,
@@ -54,147 +56,158 @@ class TasksListPage extends StatelessWidget {
                   ),
                   color: Theme.of(context).colorScheme.background,
                 ),
-                child: BlocBuilder<TasksListBloc, ITaskListBlocState>(
-                  bloc: bloc,
-                  buildWhen: (previous, current) =>
-                      current is IGetTasksListBlocState,
-                  builder: (context, state) {
-                    print("EAI1");
-                    return switch (state) {
-                      SuccessTasksListBlocState() => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextField(
-                              enabled: !bloc.isListEmpty(),
-                              decoration: const InputDecoration(
-                                hintText: "Pesquise...",
-                                prefixIcon: Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
+                child: BlocProvider(
+                  create: (context) => bloc,
+                  child: BlocBuilder<TasksListBloc, ITaskListBlocState>(
+                    bloc: bloc,
+                    buildWhen: (previous, current) =>
+                        current is IGetTasksListBlocState,
+                    builder: (context, state) {
+                      print("SWITCH -> $state");
+                      return switch (state) {
+                        SuccessTasksListBlocState() => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextField(
+                                enabled: !bloc.isListEmpty(),
+                                decoration: const InputDecoration(
+                                  hintText: "Pesquise...",
+                                  prefixIcon: Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
                                   ),
+                                  //
                                 ),
-                                //
+                                onChanged: (value) {
+                                  bloc.add(FilterTaskListEvent(text: value));
+                                },
                               ),
-                              onChanged: (value) {
-                                bloc.add(FilterTaskListEvent(text: value));
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            BlocBuilder(
-                              bloc: bloc,
-                              buildWhen: (previous, current) =>
-                                  current is IChangeItemTaskListBlocState,
-                              builder: (context, state) {
-                                return CarouselTasks(
-                                  listTasks: bloc.selectThreeElements(),
-                                );
-                              },
-                            ),
-                            BlocBuilder(
-                              bloc: bloc,
-                              buildWhen: (previous, current) =>
-                                  current is ITaskItemListBlocState ||
-                                  current is IChangeItemTaskListBlocState,
-                              builder: (context, state) {
-                                print("eai");
-                                return Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Tarefas",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
+                              const SizedBox(height: 16),
+                              BlocBuilder(
+                                bloc: bloc,
+                                buildWhen: (previous, current) =>
+                                    current is IChangeItemTaskListBlocState,
+                                builder: (context, state) {
+                                  print("CAROUSEL -> $state");
+                                  return CarouselTasks(
+                                    listTasks: bloc.selectThreeElements(),
+                                  );
+                                },
+                              ),
+                              BlocBuilder(
+                                bloc: bloc,
+                                buildWhen: (previous, current) =>
+                                    current is ITaskItemListBlocState ||
+                                    current is IChangeItemTaskListBlocState,
+                                builder: (context, state) {
+                                  print("ListTask -> $state");
+
+                                  return Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Tarefas",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            state is EmptyTasksListBlcoState
-                                                ? const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 32),
-                                                    child: Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.list,
-                                                            size: 55,
-                                                          ),
-                                                          Text(
-                                                            "Lista vazia",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 24,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          Text(
-                                                            "Adicione uma tarefa para começar",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              fontSize: 16,
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              bloc.filterTasks.isEmpty
+                                                  ? const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 32),
+                                                      child: Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.list,
+                                                              size: 55,
                                                             ),
-                                                          ),
-                                                        ],
+                                                            Text(
+                                                              "Lista vazia",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  fontSize: 24,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            Text(
+                                                              "Adicione uma tarefa para começar",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Expanded(
+                                                      child: ListView.builder(
+                                                        itemCount: bloc
+                                                            .filterTasks.length,
+                                                        itemBuilder:
+                                                            (context, index) =>
+                                                                TaskItem(
+                                                          task:
+                                                              bloc.filterTasks[
+                                                                  index],
+                                                          onDismissed: (p0) {
+                                                            bloc.add(
+                                                              DeleteTaskListEvent(
+                                                                task:
+                                                                    bloc.filterTasks[
+                                                                        index],
+                                                              ),
+                                                            );
+                                                          },
+                                                          onChagend: (p0) {
+                                                            bloc.add(
+                                                              SelectedTaskListEvent(
+                                                                index: index,
+                                                                value: p0!,
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
                                                       ),
                                                     ),
-                                                  )
-                                                : Expanded(
-                                                    child: ListView.builder(
-                                                      itemCount: bloc
-                                                          .filterTasks.length,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              TaskItem(
-                                                        task: bloc
-                                                            .filterTasks[index],
-                                                        onDismissed: (p0) {
-                                                          bloc.add(
-                                                            DeleteTaskListEvent(
-                                                              task:
-                                                                  bloc.filterTasks[
-                                                                      index],
-                                                            ),
-                                                          );
-                                                        },
-                                                        onChagend: (p0) {
-                                                          bloc.add(
-                                                            SelectedTaskListEvent(
-                                                              index: index,
-                                                              value: p0!,
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      LoadingTasksListBlocState() => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      _ => Container(),
-                    };
-                  },
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        LoadingTasksListBlocState() => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        FailureTasksListBlocState errorState => FailureWidget(
+                            errorState: errorState.failureState,
+                          ),
+                        _ => Container(),
+                      };
+                    },
+                  ),
                 ),
               ),
             ),
@@ -203,6 +216,62 @@ class TasksListPage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ButtonsTasksList(bloc: bloc),
+    );
+  }
+}
+
+class FailureWidget extends StatefulWidget {
+  const FailureWidget({
+    super.key,
+    required this.errorState,
+  });
+  final FailureServiceState errorState;
+
+  @override
+  State<FailureWidget> createState() => _FailureWidgetState();
+}
+
+class _FailureWidgetState extends State<FailureWidget> {
+  IconData icon = Icons.error_outline;
+  String title = "Ocorreu um problema!";
+  @override
+  void initState() {
+    super.initState();
+    if (widget.errorState is NoConnectionFailureServiceState) {
+      icon = Icons.signal_wifi_connected_no_internet_4_outlined;
+      title = "Problema de conexão";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<TasksListBloc>(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 55,
+        ),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const Text(
+          "Tente novamente mais tarde",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            bloc.add(GetTasksListEvent());
+          },
+          child: const Icon(Icons.sync),
+        ),
+      ],
     );
   }
 }
@@ -227,18 +296,20 @@ class ButtonsTasksList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddTaskPage(),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      bloc.add(AddTaskListEvent(task: value));
-                    }
-                  });
-                },
+                onPressed: state is FailureTasksListBlocState
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(),
+                          ),
+                        ).then((value) {
+                          if (value != null) {
+                            bloc.add(AddTaskListEvent(task: value));
+                          }
+                        });
+                      },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
