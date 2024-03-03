@@ -34,7 +34,7 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
       (event, emit) async {
         emit(LoadingAddTaskListener());
         taskModel.title = event.nameTask;
-        final result = await authRepository.getUser();
+        final result = await authRepository.getUser(event.database);
         if (result is SuccessServiceState<UserModel>) {
           UserModel user = result.data;
           taskModel.id = const Uuid().v1();

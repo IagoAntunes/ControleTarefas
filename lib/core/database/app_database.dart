@@ -24,19 +24,19 @@ class AppDatabase {
     ]);
   }
 
-  static Future<UserModel> getUser() async {
+  Future<UserModel> getUser() async {
     final db = await AppDatabase.db();
     final user = await db.query('user');
     return UserModel.fromMap(user.first);
   }
 
-  static Future<bool> insertUser(UserModel user) async {
+  Future<bool> insertUser(UserModel user) async {
     final db = await AppDatabase.db();
     int qtd = await db.insert('user', user.toMap());
     return qtd >= 1 ? true : false;
   }
 
-  static Future<void> deleteUser() async {
+  Future<void> deleteUser() async {
     final db = await AppDatabase.db();
     await db.delete('user');
   }

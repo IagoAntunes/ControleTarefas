@@ -6,6 +6,8 @@ import 'package:demarco_teste_pratico/features/login/data/service/login_firebase
 import 'package:demarco_teste_pratico/features/login/domain/models/login_request_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../core/database/app_database.dart';
+
 abstract class IAuthRepository {
   Future<IServiceState> login(
     LoginRequestModel requestModel,
@@ -16,9 +18,9 @@ abstract class IAuthRepository {
     FirebaseAuth firebaseAuth,
     FirebaseFirestore firestore,
   );
-  Future<IServiceState> storeUser(UserModel user);
-  Future<IServiceState> getUser();
-  Future<IServiceState> logout();
+  Future<IServiceState> storeUser(UserModel user, AppDatabase database);
+  Future<IServiceState> getUser(AppDatabase database);
+  Future<IServiceState> logout(AppDatabase database);
 }
 
 class AuthRepository extends IAuthRepository {
@@ -49,17 +51,20 @@ class AuthRepository extends IAuthRepository {
   }
 
   @override
-  Future<IServiceState> storeUser(UserModel user) {
-    return dao.storeUser(user);
+  Future<IServiceState> storeUser(
+    UserModel user,
+    AppDatabase database,
+  ) {
+    return dao.storeUser(user, database);
   }
 
   @override
-  Future<IServiceState> getUser() {
-    return dao.geteUser();
+  Future<IServiceState> getUser(AppDatabase database) {
+    return dao.geteUser(database);
   }
 
   @override
-  Future<IServiceState> logout() {
-    return dao.deleteUser();
+  Future<IServiceState> logout(AppDatabase database) {
+    return dao.deleteUser(database);
   }
 }

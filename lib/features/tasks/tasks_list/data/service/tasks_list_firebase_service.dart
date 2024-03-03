@@ -8,23 +8,40 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../domain/models/task_model.dart';
 
 abstract class ITasksListFirebaseService {
-  Future<IServiceState> getTasks(UserModel user);
+  Future<IServiceState> getTasks(
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage? storage,
+  );
   Future<IServiceState> completeTasks(
-      UserModel user, List<TaskModel> listTasks);
+    UserModel user,
+    List<TaskModel> listTasks,
+    FirebaseFirestore firestore,
+  );
 
-  Future<IServiceState> getImages(UserModel user);
+  Future<IServiceState> getImages(
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage storage,
+  );
 
-  Future<IServiceState> deleteTask(UserModel user, TaskModel task);
+  Future<IServiceState> deleteTask(
+    UserModel user,
+    TaskModel task,
+    FirebaseFirestore firestore,
+  );
 }
 
 class TasksListFirebaseService extends ITasksListFirebaseService {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirebaseStorage storage = FirebaseStorage.instance;
   @override
-  Future<IServiceState> getTasks(UserModel user) async {
+  Future<IServiceState> getTasks(
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage? storage,
+  ) async {
     try {
       final result = await firestore.collection('tasks').doc(user.uid).get();
-      storage.ref();
+      //storage!.ref();
       return SuccessServiceState(data: result.data());
     } catch (e) {
       return FailureServiceState(message: 'Erro');
@@ -33,7 +50,10 @@ class TasksListFirebaseService extends ITasksListFirebaseService {
 
   @override
   Future<IServiceState> completeTasks(
-      UserModel user, List<TaskModel> listTasks) async {
+    UserModel user,
+    List<TaskModel> listTasks,
+    FirebaseFirestore firestore,
+  ) async {
     try {
       final doc = firestore.collection('tasks').doc(user.uid);
 
@@ -52,17 +72,23 @@ class TasksListFirebaseService extends ITasksListFirebaseService {
   }
 
   @override
-  Future<IServiceState> getImages(UserModel user) async {
-    FirebaseStorage storage = FirebaseStorage.instance;
+  Future<IServiceState> getImages(
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage storage,
+  ) async {
     try {
       var imagePath = '${user.uid}/';
       ListResult result = await storage.ref(imagePath).listAll();
       List<Map<String, dynamic>> listImages = [];
-      for (var item in result.items) {
-        var image = await item.getData();
-        List<int> list = image!.toList();
-        listImages.add({'task': item.name, 'b64': base64Encode(list)});
+      if (result.items.isNotEmpty) {
+        for (var item in result.items) {
+          var image = await item.getData();
+          List<int> list = image!.toList();
+          listImages.add({'task': item.name, 'b64': base64Encode(list)});
+        }
       }
+
       return SuccessServiceState<List<Map<String, dynamic>>>(data: listImages);
     } catch (e) {
       return FailureServiceState(message: 'Erro');
@@ -70,8 +96,11 @@ class TasksListFirebaseService extends ITasksListFirebaseService {
   }
 
   @override
-  Future<IServiceState> deleteTask(UserModel user, TaskModel task) async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Future<IServiceState> deleteTask(
+    UserModel user,
+    TaskModel task,
+    FirebaseFirestore firestore,
+  ) async {
     try {
       await firestore.collection('tasks').doc(user.uid).update({
         'listTasks': FieldValue.arrayRemove([task.toMap()]),

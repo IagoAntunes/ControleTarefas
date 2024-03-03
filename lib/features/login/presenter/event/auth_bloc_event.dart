@@ -1,6 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:demarco_teste_pratico/core/database/app_database.dart';
 
 import '../utils/auth_options_enum.dart';
 
@@ -20,12 +23,14 @@ class LoginLoginBlocEvent extends IAuthBlocEvent {
   String password;
   SharedPreferences shared;
   FirebaseAuth firebaseAuth;
+  AppDatabase database;
 
   LoginLoginBlocEvent({
     required this.email,
     required this.password,
     required this.shared,
     required this.firebaseAuth,
+    required this.database,
   }) : super(authOption: AuthOption.login);
 }
 
@@ -35,15 +40,21 @@ class CreateAuthBlocEvent extends IAuthBlocEvent {
   SharedPreferences shared;
   FirebaseAuth firebaseAuth;
   FirebaseFirestore firestore;
+  AppDatabase database;
   CreateAuthBlocEvent({
     required this.email,
     required this.password,
     required this.shared,
     required this.firebaseAuth,
     required this.firestore,
+    required this.database,
   }) : super(authOption: AuthOption.register);
 }
 
 class LogoutAuthBlocEvent extends IAuthBlocEvent {
-  LogoutAuthBlocEvent({required super.authOption});
+  AppDatabase database;
+  LogoutAuthBlocEvent({
+    required super.authOption,
+    required this.database,
+  });
 }

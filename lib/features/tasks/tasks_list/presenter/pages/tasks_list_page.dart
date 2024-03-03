@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,6 +37,10 @@ class TasksListPage extends StatelessWidget {
     repository: TasksListRepository(
       service: TasksListFirebaseService(),
     ),
+    connectivity: Connectivity(),
+    database: AppDatabase(),
+    firestore: FirebaseFirestore.instance,
+    storage: FirebaseStorage.instance,
   );
   @override
   Widget build(BuildContext context) {
@@ -174,6 +182,11 @@ class TasksListPage extends StatelessWidget {
                                                                 task:
                                                                     bloc.filterTasks[
                                                                         index],
+                                                                database:
+                                                                    AppDatabase(),
+                                                                firestore:
+                                                                    FirebaseFirestore
+                                                                        .instance,
                                                               ),
                                                             );
                                                           },
@@ -267,7 +280,12 @@ class _FailureWidgetState extends State<FailureWidget> {
         ),
         ElevatedButton(
           onPressed: () {
-            bloc.add(GetTasksListEvent());
+            bloc.add(GetTasksListEvent(
+              database: AppDatabase(),
+              firestore: FirebaseFirestore.instance,
+              storage: FirebaseStorage.instance,
+              connectivity: Connectivity(),
+            ));
           },
           child: const Icon(Icons.sync),
         ),
@@ -306,7 +324,10 @@ class ButtonsTasksList extends StatelessWidget {
                           ),
                         ).then((value) {
                           if (value != null) {
-                            bloc.add(AddTaskListEvent(task: value));
+                            bloc.add(AddTaskListEvent(
+                              task: value,
+                              firestore: FirebaseFirestore.instance,
+                            ));
                           }
                         });
                       },
@@ -329,7 +350,12 @@ class ButtonsTasksList extends StatelessWidget {
                 onPressed: !bloc.isOkDone
                     ? null
                     : () {
-                        bloc.add(DoneTasksListEvent());
+                        bloc.add(
+                          DoneTasksListEvent(
+                            database: AppDatabase(),
+                            firestore: FirebaseFirestore.instance,
+                          ),
+                        );
                       },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
@@ -401,6 +427,7 @@ class HeadListTasks extends StatelessWidget {
                   authBloc.add(
                     LogoutAuthBlocEvent(
                       authOption: AuthOption.login,
+                      database: AppDatabase(),
                     ),
                   );
                   Navigator.pushReplacement(

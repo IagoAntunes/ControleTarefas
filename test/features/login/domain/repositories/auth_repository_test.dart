@@ -52,6 +52,9 @@ void main() {
     registerFallbackValue(
       MockFirebaseFirestore(),
     );
+    registerFallbackValue(
+      MockAppDatabase(),
+    );
   });
 
   group('AuthRepositoryTests', () {
@@ -108,44 +111,44 @@ void main() {
     group('storeUser', () {
       test('storeUser | Sucess', () async {
         when(
-          () => dao.storeUser(any()),
+          () => dao.storeUser(any(), any()),
         ).thenAnswer((invocation) async {
           return SuccessServiceState(data: '');
         });
 
-        final result = await repository.storeUser(user);
+        final result = await repository.storeUser(user, MockAppDatabase());
         expect(result, isA<SuccessServiceState>());
       });
       test('storeUser | Failure', () async {
         when(
-          () => dao.storeUser(any()),
+          () => dao.storeUser(any(), any()),
         ).thenAnswer((invocation) async {
           return FailureServiceState(message: '');
         });
 
-        final result = await repository.storeUser(user);
+        final result = await repository.storeUser(user, MockAppDatabase());
         expect(result, isA<FailureServiceState>());
       });
     });
     group('getUser', () {
       test('getUser | Sucess', () async {
         when(
-          () => dao.geteUser(),
+          () => dao.geteUser(any()),
         ).thenAnswer((invocation) async {
           return SuccessServiceState(data: '');
         });
 
-        final result = await repository.getUser();
+        final result = await repository.getUser(MockAppDatabase());
         expect(result, isA<SuccessServiceState>());
       });
       test('getUser | Failure', () async {
         when(
-          () => dao.geteUser(),
+          () => dao.geteUser(any()),
         ).thenAnswer((invocation) async {
           return FailureServiceState(message: '');
         });
 
-        final result = await repository.getUser();
+        final result = await repository.getUser(MockAppDatabase());
         expect(result, isA<FailureServiceState>());
       });
     });
@@ -153,22 +156,22 @@ void main() {
     group('logout', () {
       test('logout | Sucess', () async {
         when(
-          () => dao.deleteUser(),
+          () => dao.deleteUser(any()),
         ).thenAnswer((invocation) async {
           return SuccessServiceState(data: '');
         });
 
-        final result = await repository.logout();
+        final result = await repository.logout(MockAppDatabase());
         expect(result, isA<SuccessServiceState>());
       });
       test('logout | Failure', () async {
         when(
-          () => dao.deleteUser(),
+          () => dao.deleteUser(any()),
         ).thenAnswer((invocation) async {
           return FailureServiceState(message: '');
         });
 
-        final result = await repository.logout();
+        final result = await repository.logout(MockAppDatabase());
         expect(result, isA<FailureServiceState>());
       });
     });

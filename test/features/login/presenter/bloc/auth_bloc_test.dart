@@ -38,6 +38,8 @@ class MockUser extends Mock implements User {
   });
 }
 
+class MockUser2 extends Mock implements User {}
+
 class MockUserModel extends Mock implements UserModel {}
 
 class MockRequestModel extends Mock implements LoginRequestModel {}
@@ -68,6 +70,7 @@ void main() {
       MockFirebaseFirestore(),
     );
     registerFallbackValue(MockSharedPreferences());
+    registerFallbackValue(MockAppDatabase());
   });
   tearDown(() {
     authBloc.close();
@@ -110,7 +113,7 @@ void main() {
         );
         when(() => mockSharedPreferences.setBool('isLogged', true))
             .thenAnswer((_) => Future.value(true));
-        when(() => mockAuthRepository.getUser()).thenAnswer((_) async {
+        when(() => mockAuthRepository.getUser(any())).thenAnswer((_) async {
           return SuccessServiceState<UserCredential>(
             data: MockUserCredential(
               user: MockUser(email: 'email', uid: 'uid'),
@@ -118,7 +121,7 @@ void main() {
           );
         });
 
-        when(() => mockAuthRepository.storeUser(any())).thenAnswer(
+        when(() => mockAuthRepository.storeUser(any(), any())).thenAnswer(
           (_) async => SuccessServiceState(data: ''),
         );
         bloc.add(
@@ -127,6 +130,7 @@ void main() {
             password: '1234',
             shared: mockSharedPreferences,
             firebaseAuth: MockFirebaseAuth(),
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -150,6 +154,7 @@ void main() {
             password: '1234',
             shared: mockSharedPreferences,
             firebaseAuth: MockFirebaseAuth(),
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -172,7 +177,7 @@ void main() {
         });
         when(() => mockSharedPreferences.setBool('isLogged', true))
             .thenAnswer((_) => Future.value(true));
-        when(() => mockAuthRepository.storeUser(any())).thenAnswer(
+        when(() => mockAuthRepository.storeUser(any(), any())).thenAnswer(
           (_) async => SuccessServiceState(data: ''),
         );
 
@@ -183,6 +188,7 @@ void main() {
             shared: mockSharedPreferences,
             firebaseAuth: MockFirebaseAuth(),
             firestore: MockFirebaseFirestore(),
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -210,6 +216,7 @@ void main() {
             shared: MockSharedPreferences(),
             firebaseAuth: MockFirebaseAuth(),
             firestore: MockFirebaseFirestore(),
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -223,7 +230,7 @@ void main() {
       'LogoutAuthBlocEvent - Success',
       build: () => authBloc,
       act: (bloc) {
-        when(() => mockAuthRepository.logout()).thenAnswer(
+        when(() => mockAuthRepository.logout(any())).thenAnswer(
           (invocation) async {
             return SuccessServiceState(data: '');
           },
@@ -231,6 +238,7 @@ void main() {
         bloc.add(
           LogoutAuthBlocEvent(
             authOption: AuthOption.login,
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -242,7 +250,7 @@ void main() {
       'LogoutAuthBlocEvent - Failure',
       build: () => authBloc,
       act: (bloc) {
-        when(() => mockAuthRepository.logout()).thenAnswer(
+        when(() => mockAuthRepository.logout(any())).thenAnswer(
           (invocation) async {
             return FailureServiceState(message: 'teste');
           },
@@ -250,6 +258,7 @@ void main() {
         bloc.add(
           LogoutAuthBlocEvent(
             authOption: AuthOption.login,
+            database: MockAppDatabase(),
           ),
         );
       },
@@ -268,12 +277,12 @@ void main() {
     });
     test('storeUser', () async {
       final user = UserModel(uid: '', email: '');
-      when(() => mockAuthRepository.storeUser(user))
+      when(() => mockAuthRepository.storeUser(user, any()))
           .thenAnswer((_) async => SuccessServiceState(data: ''));
 
       await authBloc.storeUserFunc(user);
 
-      verify(() => mockAuthRepository.storeUser(user)).called(1);
+      verify(() => mockAuthRepository.storeUser(user, any())).called(1);
     });
 
     test('isAuthLogin', () {

@@ -1,3 +1,4 @@
+import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/core/models/user_model.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
@@ -38,7 +39,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
           uid: result.data.user!.uid,
           email: result.data.user!.email!,
         );
-        await repository.storeUser(user);
+        await repository.storeUser(user, event.database);
         emit(SuccessAuthListener(authOption: state.authOption));
       } else if (result is FailureServiceState) {
         emit(
@@ -67,7 +68,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
           email: result.data.user!.email!,
         );
 
-        await repository.storeUser(user);
+        await repository.storeUser(user, event.database);
         emit(SuccessAuthListener(authOption: state.authOption));
         emit(LoggedLoginState());
       } else if (result is FailureServiceState) {
@@ -79,7 +80,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
       } else {}
     });
     on<LogoutAuthBlocEvent>((event, emit) async {
-      final result = await repository.logout();
+      final result = await repository.logout(event.database);
       if (result is SuccessServiceState) {
         emit(LogoutAuthListener(authOption: AuthOption.login));
       } else if (result is FailureServiceState) {
@@ -98,7 +99,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
   }
 
   Future<void> storeUserFunc(UserModel user) async {
-    await repository.storeUser(user);
+    await repository.storeUser(user, AppDatabase());
   }
 
   bool isAuthLogin() => state.authOption == AuthOption.login;

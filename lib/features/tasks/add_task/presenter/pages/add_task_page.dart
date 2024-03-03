@@ -1,3 +1,4 @@
+import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
 import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
 import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
@@ -191,7 +192,12 @@ class AddTaskPage extends StatelessWidget {
         onPressed: () {
           if (_formTask.currentState!.validate()) {
             if (bloc.taskModel.image != null) {
-              bloc.add(AddTaskEvent(nameTask: taskController.text));
+              bloc.add(
+                AddTaskEvent(
+                  nameTask: taskController.text,
+                  database: AppDatabase(),
+                ),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

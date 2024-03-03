@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/state/auth_option_state.dart';
@@ -269,6 +270,7 @@ class LoginWidget extends StatelessWidget {
                         password: passwordController.text,
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
+                        database: AppDatabase(),
                       ),
                     );
                   } else {
@@ -279,6 +281,7 @@ class LoginWidget extends StatelessWidget {
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
                         firestore: FirebaseFirestore.instance,
+                        database: AppDatabase(),
                       ),
                     );
                   }
