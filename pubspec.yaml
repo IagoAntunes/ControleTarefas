@@ -47,7 +47,8 @@ dependencies:
   uuid: ^4.3.3
   carousel_slider: ^4.2.1
   connectivity_plus: ^5.0.2
-  mockito: ^5.4.4
+  bloc_test: ^9.1.6
+  mocktail: ^1.0.3
   
 dev_dependencies:
   flutter_test:

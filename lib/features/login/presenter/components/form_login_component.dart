@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/state/auth_option_state.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/pages/tasks_list_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/components/custom_textfield_component.dart';
 
@@ -257,13 +260,15 @@ class LoginWidget extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   if (authBloc.state.authOption == AuthOption.login) {
                     authBloc.add(
                       LoginLoginBlocEvent(
                         email: emailController.text,
                         password: passwordController.text,
+                        shared: await SharedPreferences.getInstance(),
+                        firebaseAuth: FirebaseAuth.instance,
                       ),
                     );
                   } else {
@@ -271,6 +276,9 @@ class LoginWidget extends StatelessWidget {
                       CreateAuthBlocEvent(
                         email: emailController.text,
                         password: passwordController.text,
+                        shared: await SharedPreferences.getInstance(),
+                        firebaseAuth: FirebaseAuth.instance,
+                        firestore: FirebaseFirestore.instance,
                       ),
                     );
                   }

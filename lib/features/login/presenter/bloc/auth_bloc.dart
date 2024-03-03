@@ -17,7 +17,6 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
   }) : super(LoginAuthOptionState()) {
     on<ChangeOptionAuthBlocEvent>((event, emit) {
       if (event.authOption == AuthOption.login) {
-        print("Oi");
         emit(LoginAuthOptionState());
       } else {
         emit(RegisterAuthOptionState());
@@ -29,12 +28,17 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
         email: event.email,
         password: event.password,
       );
-      IServiceState result = await repository.login(request);
+      IServiceState result = await repository.login(
+        request,
+        event.firebaseAuth,
+      );
       if (result is SuccessServiceState<UserCredential>) {
-        _userLogged(true);
+        await event.shared.setBool('isLogged', true);
         var user = UserModel(
-            uid: result.data.user!.uid, email: result.data.user!.email!);
-        await _storeUser(user);
+          uid: result.data.user!.uid,
+          email: result.data.user!.email!,
+        );
+        await repository.storeUser(user);
         emit(SuccessAuthListener(authOption: state.authOption));
       } else if (result is FailureServiceState) {
         emit(
@@ -44,20 +48,26 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
         emit(FailureLoginState(message: result.message));
       }
     });
+
     on<CreateAuthBlocEvent>((event, emit) async {
       emit(LoadingLoginBlocState());
       var request = LoginRequestModel(
         email: event.email,
         password: event.password,
       );
-      final result = await repository.createAccount(request);
+      final result = await repository.createAccount(
+        request,
+        event.firebaseAuth,
+        event.firestore,
+      );
       if (result is SuccessServiceState) {
-        _userLogged(true);
+        await event.shared.setBool('isLogged', true);
         var user = UserModel(
           uid: result.data.user!.uid,
           email: result.data.user!.email!,
         );
-        await _storeUser(user);
+
+        await repository.storeUser(user);
         emit(SuccessAuthListener(authOption: state.authOption));
         emit(LoggedLoginState());
       } else if (result is FailureServiceState) {
@@ -66,22 +76,28 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
               authOption: state.authOption, message: result.message),
         );
         emit(FailureLoginState(message: result.message));
-      }
+      } else {}
     });
     on<LogoutAuthBlocEvent>((event, emit) async {
       final result = await repository.logout();
       if (result is SuccessServiceState) {
         emit(LogoutAuthListener(authOption: AuthOption.login));
+      } else if (result is FailureServiceState) {
+        emit(
+          FailureAuthListener(
+            message: '',
+            authOption: AuthOption.login,
+          ),
+        );
       }
     });
   }
 
-  Future<void> _userLogged(bool value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLogged', value);
+  Future<void> userLogged(bool value, SharedPreferences shared) async {
+    await shared.setBool('isLogged', value);
   }
 
-  Future<void> _storeUser(UserModel user) async {
+  Future<void> storeUserFunc(UserModel user) async {
     await repository.storeUser(user);
   }
 
