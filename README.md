@@ -1,16 +1,30 @@
-# demarco_teste_pratico
+# Nome do Seu Projeto Flutter
 
-A new Flutter project.
+Breve descrição ou resumo do seu projeto.
 
-## Getting Started
+## Pré-requisitos
 
-This project is a starting point for a Flutter application.
+Certifique-se de ter o Flutter e o Dart instalados em sua máquina. Para obter instruções sobre como instalar, consulte a [documentação oficial do Flutter](https://flutter.dev/docs/get-started/install).
 
-A few resources to get you started if this is your first Flutter project:
+### Instale as dependências
+flutter pub get
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Execute o aplicativo
+flutter run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Como Testar o Projeto Flutter
+
+O teste do seu projeto Flutter é uma etapa crucial para garantir que tudo funcione conforme o esperado. Aqui estão algumas instruções sobre como testar o projeto:
+
+### Testes de Unidade
+
+Os testes de unidade são usados para testar unidades individuais de código. No Flutter, os testes de unidade são escritos usando a biblioteca `flutter_test`, com auxilio de outras bibliotecas [**mocktail**](https://pub.dev/packages/mocktail), [**bloc_test**](https://pub.dev/packages/bloc_test)
+
+Para executar os testes de unidade, siga estas etapas:
+
+```dart
+flutter test
+```
+### Arquitetura do Aplicativo
+[<img align="left" alt="Warpnet" src="https://github.com/IagoAntunes/tasks_app/blob/main/assets/github/architecture_flow_app.png"/>](Arquitetura)
+
