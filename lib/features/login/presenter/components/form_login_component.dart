@@ -8,7 +8,6 @@ import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/pages/
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/components/custom_textfield_component.dart';
@@ -270,7 +269,7 @@ class LoginWidget extends StatelessWidget {
                         password: passwordController.text,
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
-                        database: GetIt.I.get<AppDatabase>(),
+                        database: AppDatabase(),
                       ),
                     );
                   } else {
@@ -281,7 +280,7 @@ class LoginWidget extends StatelessWidget {
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
                         firestore: FirebaseFirestore.instance,
-                        database: GetIt.I.get<AppDatabase>(),
+                        database: AppDatabase(),
                       ),
                     );
                   }
@@ -295,7 +294,7 @@ class LoginWidget extends StatelessWidget {
                 ),
               ),
               icon: authBloc.state is LoadingLoginBlocState
-                  ? null
+                  ? Container()
                   : const Icon(
                       Icons.login_outlined,
                       color: Colors.white,

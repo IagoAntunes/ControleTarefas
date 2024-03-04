@@ -139,6 +139,7 @@ class AddTaskPage extends StatelessWidget {
                     },
                     onTap: () async {
                       await showDatePicker(
+                        initialDate: DateTime.now(),
                         context: context,
                         firstDate: DateTime(DateTime.now().year - 1),
                         lastDate: DateTime(DateTime.now().year + 1),
