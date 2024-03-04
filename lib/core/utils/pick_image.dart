@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 
 class AppUtils {
-  static Future<String?> pickImage(ImageSource source) async {
+  static Future<String?> pickImage(
+      ImageSource source, ImagePicker imagePicker) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
+      final image = await imagePicker.pickImage(source: source);
       if (image == null) {
         return null;
       }

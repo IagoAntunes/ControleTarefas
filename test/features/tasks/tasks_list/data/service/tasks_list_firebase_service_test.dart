@@ -16,7 +16,8 @@ void main() {
   late MocListResult mockListResult;
   late MockReference mockReference;
   setUp(() {
-    mockDocumentSnapShotReference = MockDocumentSnapShotReference();
+    mockDocumentSnapShotReference =
+        MockDocumentSnapShotReference(itExist: true);
     mockCollectionReference = MockCollectionReference();
     mockDocumentReference = MockDocumentReference();
     mockFirebaseStorage = MockFirebaseStorage();

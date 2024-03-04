@@ -29,6 +29,16 @@ class MockDocumentReference extends Mock
     implements DocumentReference<Map<String, dynamic>> {}
 
 class MockDocumentSnapShotReference extends Mock
-    implements DocumentSnapshot<Map<String, dynamic>> {}
+    implements DocumentSnapshot<Map<String, dynamic>> {
+  MockDocumentSnapShotReference({
+    required this.itExist,
+  });
+  bool itExist;
+  @override
+  // TODO: implement exists
+  bool get exists => itExist;
+}
+
+class MockUploadTask extends Mock implements UploadTask {}
 
 class MockAppDatabase extends Mock implements AppDatabase {}

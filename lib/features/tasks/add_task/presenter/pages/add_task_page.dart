@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
 import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
@@ -8,8 +9,10 @@ import 'package:demarco_teste_pratico/features/tasks/add_task/domain/repositorie
 import 'package:demarco_teste_pratico/features/tasks/add_task/presenter/bloc/add_task_bloc.dart';
 import 'package:demarco_teste_pratico/features/tasks/add_task/presenter/event/add_task_event.dart';
 import 'package:demarco_teste_pratico/features/tasks/add_task/presenter/states/add_task_state.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/components/custom_textfield_component.dart';
@@ -178,7 +181,11 @@ class AddTaskPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        bloc.add(SelectImageEvent());
+                        bloc.add(
+                          SelectImageEvent(
+                            imagePicker: ImagePicker(),
+                          ),
+                        );
                       },
                     ),
                   )
@@ -196,6 +203,8 @@ class AddTaskPage extends StatelessWidget {
                 AddTaskEvent(
                   nameTask: taskController.text,
                   database: AppDatabase(),
+                  firestore: FirebaseFirestore.instance,
+                  storage: FirebaseStorage.instance,
                 ),
               );
             } else {

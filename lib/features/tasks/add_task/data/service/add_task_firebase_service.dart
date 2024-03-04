@@ -8,14 +8,22 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../../../../core/states/app_service_state.dart';
 
 abstract class IAddTaskFirebaseService {
-  Future<IServiceState> addTask(TaskModel task, UserModel user);
+  Future<IServiceState> addTask(
+    TaskModel task,
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage storage,
+  );
 }
 
 class AddTaskFirebaseService extends IAddTaskFirebaseService {
   @override
-  Future<IServiceState> addTask(TaskModel task, UserModel user) async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    FirebaseStorage storage = FirebaseStorage.instance;
+  Future<IServiceState> addTask(
+    TaskModel task,
+    UserModel user,
+    FirebaseFirestore firestore,
+    FirebaseStorage storage,
+  ) async {
     try {
       DocumentReference<Map<String, dynamic>> docRef =
           firestore.collection('tasks').doc(user.uid);
@@ -25,10 +33,9 @@ class AddTaskFirebaseService extends IAddTaskFirebaseService {
       var ref = storage.ref();
       if (docSnapshot.exists) {
         // O documento existe, então atualiza
-        await ref
-            .child(imagePath)
-            .putData(base64.decode(task.image!))
-            .then((p0) {});
+        var t = ref.child(imagePath);
+
+        final result2 = await t.putData(base64.decode(task.image!));
         await docRef.update({
           'listTasks': FieldValue.arrayUnion([
             task.toMap(),

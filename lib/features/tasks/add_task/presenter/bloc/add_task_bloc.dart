@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:demarco_teste_pratico/core/models/user_model.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/core/utils/pick_image.dart';
@@ -23,9 +25,19 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
     });
     on<SelectImageEvent>(
       (event, emit) async {
-        String? image = await AppUtils.pickImage(ImageSource.camera);
+        String? resultImage;
+        XFile? image =
+            await event.imagePicker.pickImage(source: ImageSource.camera);
         if (image != null) {
-          taskModel.image = image;
+          final imageTemporary = XFile(image.path);
+
+          final bytes = await imageTemporary.readAsBytes();
+
+          resultImage = base64Encode(bytes);
+        }
+
+        if (image != null) {
+          taskModel.image = resultImage;
           emit(AddedImageTaskState());
         }
       },
@@ -38,7 +50,12 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
         if (result is SuccessServiceState<UserModel>) {
           UserModel user = result.data;
           taskModel.id = const Uuid().v1();
-          final result2 = await repository.addTask(taskModel, user);
+          final result2 = await repository.addTask(
+            TaskModel(title: 'title', date: 'date', image: 'image'),
+            user,
+            event.firestore,
+            event.storage,
+          );
           if (result2 is SuccessServiceState) {
             emit(SuccessAddTaskListener(task: taskModel));
           } else {
