@@ -33,9 +33,9 @@ class AddTaskFirebaseService extends IAddTaskFirebaseService {
       var ref = storage.ref();
       if (docSnapshot.exists) {
         // O documento existe, então atualiza
-        var t = ref.child(imagePath);
+        var child = ref.child(imagePath);
 
-        final result2 = await t.putData(base64.decode(task.image!));
+        await child.putData(base64.decode(task.image!));
         await docRef.update({
           'listTasks': FieldValue.arrayUnion([
             task.toMap(),

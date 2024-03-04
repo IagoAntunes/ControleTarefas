@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:demarco_teste_pratico/core/models/user_model.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/core/utils/pick_image.dart';
 import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
 import 'package:demarco_teste_pratico/features/tasks/add_task/domain/repositories/add_task_repository.dart';
 import 'package:demarco_teste_pratico/features/tasks/add_task/presenter/event/add_task_event.dart';
@@ -51,15 +50,13 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
           UserModel user = result.data;
           taskModel.id = const Uuid().v1();
           final result2 = await repository.addTask(
-            TaskModel(title: 'title', date: 'date', image: 'image'),
+            taskModel,
             user,
             event.firestore,
             event.storage,
           );
           if (result2 is SuccessServiceState) {
             emit(SuccessAddTaskListener(task: taskModel));
-          } else {
-            //
           }
         }
       },

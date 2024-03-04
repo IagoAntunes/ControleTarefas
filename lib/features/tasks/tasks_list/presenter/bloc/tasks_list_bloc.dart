@@ -36,11 +36,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
     on<GetTasksListEvent>((event, emit) async {
       emit(LoadingTasksListBlocState());
       late IServiceState result;
-      try {
-        result = await authRepository.getUser(event.database);
-      } catch (e) {
-        print("Oi");
-      }
+      result = await authRepository.getUser(event.database);
       if (result is SuccessServiceState) {
         final data = await repository.getTasks(
           result.data,

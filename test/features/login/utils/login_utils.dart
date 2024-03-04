@@ -35,7 +35,6 @@ class MockDocumentSnapShotReference extends Mock
   });
   bool itExist;
   @override
-  // TODO: implement exists
   bool get exists => itExist;
 }
 

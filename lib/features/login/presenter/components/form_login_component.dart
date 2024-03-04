@@ -8,6 +8,7 @@ import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/pages/
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/components/custom_textfield_component.dart';
@@ -63,7 +64,6 @@ class _FormLoginState extends State<FormLogin>
         },
         buildWhen: (previous, current) => current is! IAuthListeners,
         builder: (context, state) {
-          print("LOGIN -> $state");
           return Container(
             height: MediaQuery.sizeOf(context).height * 0.5,
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
@@ -270,7 +270,7 @@ class LoginWidget extends StatelessWidget {
                         password: passwordController.text,
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
-                        database: AppDatabase(),
+                        database: GetIt.I.get<AppDatabase>(),
                       ),
                     );
                   } else {
@@ -281,7 +281,7 @@ class LoginWidget extends StatelessWidget {
                         shared: await SharedPreferences.getInstance(),
                         firebaseAuth: FirebaseAuth.instance,
                         firestore: FirebaseFirestore.instance,
-                        database: AppDatabase(),
+                        database: GetIt.I.get<AppDatabase>(),
                       ),
                     );
                   }

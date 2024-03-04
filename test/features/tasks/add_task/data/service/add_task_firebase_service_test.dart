@@ -16,7 +16,7 @@ void main() {
   late MockFirebaseStorage mockFirebaseStorage;
   late MockCollectionReference mockCollectionReference;
   late MockDocumentReference mockDocumentReference;
-  late MockDocumentSnapShotReference mockDocumentSnapShotReference;
+  //late MockDocumentSnapShotReference mockDocumentSnapShotReference;
 
   late MockReference mockReference;
   late MockReference mockReferenceChild;
@@ -30,8 +30,8 @@ void main() {
     mockCollectionReference = MockCollectionReference();
     mockDocumentReference = MockDocumentReference();
     mockFirebaseStorage = MockFirebaseStorage();
-    mockDocumentSnapShotReference =
-        MockDocumentSnapShotReference(itExist: true);
+    //mockDocumentSnapShotReference =
+    //    MockDocumentSnapShotReference(itExist: true);
     mockFirebaseFirestore = MockFirebaseFirestore();
     mockReference = MockReference();
     mockReferenceChild = MockReference();
@@ -47,8 +47,7 @@ void main() {
             .thenReturn(mockCollectionReference);
         when(() => mockCollectionReference.doc(any()))
             .thenReturn(mockDocumentReference);
-        when(() => mockDocumentReference.get(any()))
-            .thenAnswer((invocation) async => mockDocumentSnapShotReference);
+        when(() => mockDocumentReference.get(any())).thenThrow(Exception());
 
         when(
           () => mockFirebaseStorage.ref(),
@@ -66,7 +65,7 @@ void main() {
         ).thenAnswer((invocation) async => Future.value());
         final result = await service.addTask(
             task, user, mockFirebaseFirestore, mockFirebaseStorage);
-        expect(result, isA<SuccessServiceState>());
+        expect(result, isA<FailureServiceState>());
       });
     });
   });

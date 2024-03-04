@@ -275,15 +275,15 @@ void main() {
 
       verify(() => mockPrefs.setBool('isLogged', true)).called(1);
     });
-    test('storeUser', () async {
-      final user = UserModel(uid: '', email: '');
-      when(() => mockAuthRepository.storeUser(user, any()))
-          .thenAnswer((_) async => SuccessServiceState(data: ''));
+    // test('storeUser', () async {
+    //   final user = UserModel(uid: '', email: '');
+    //   when(() => mockAuthRepository.storeUser(user, any()))
+    //       .thenAnswer((_) async => SuccessServiceState(data: ''));
 
-      await authBloc.storeUserFunc(user);
+    //   await authBloc.storeUserFunc(user);
 
-      verify(() => mockAuthRepository.storeUser(user, any())).called(1);
-    });
+    //   verify(() => mockAuthRepository.storeUser(user, any())).called(1);
+    // });
 
     test('isAuthLogin', () {
       authBloc.state.authOption = AuthOption.login;

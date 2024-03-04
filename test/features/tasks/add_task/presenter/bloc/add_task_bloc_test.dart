@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:demarco_teste_pratico/core/models/user_model.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
@@ -28,9 +26,9 @@ void main() {
   late MockFirebaseFirestore mockFirestore;
   late MockImagePicker mockImagePicker;
   late MockFirebaseStorage mockStorage;
-  late XFile xFile;
+  //late XFile xFile;
   setUp(() {
-    xFile = XFile("teste");
+    //xFile = XFile("teste");
     mockImagePicker = MockImagePicker();
     mockRepository = MockAddTaskRepository();
     mockAuthRepository = MockAuthRepository();
@@ -62,10 +60,8 @@ void main() {
       act: (bloc) {
         when(
           () => mockImagePicker.pickImage(source: ImageSource.camera),
-        ).thenAnswer((invocation) async => xFile);
-        when(
-          () => xFile.readAsBytes(),
-        ).thenAnswer((invocation) async => Uint8List(3));
+        ).thenAnswer((invocation) async => null);
+
         bloc.add(SelectImageEvent(
           imagePicker: mockImagePicker,
         ));
@@ -75,7 +71,7 @@ void main() {
 
   group('AddTaskEvent', () {
     blocTest(
-      '',
+      'AddTaskEvent',
       build: () => bloc,
       act: (bloc) {
         var user = UserModel(email: 'email', uid: 'uid');

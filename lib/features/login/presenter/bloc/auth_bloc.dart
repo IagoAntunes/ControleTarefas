@@ -1,4 +1,3 @@
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
 import 'package:demarco_teste_pratico/core/models/user_model.dart';
 import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
 import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
@@ -98,9 +97,9 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
     await shared.setBool('isLogged', value);
   }
 
-  Future<void> storeUserFunc(UserModel user) async {
-    await repository.storeUser(user, AppDatabase());
-  }
+  // Future<void> storeUserFunc(UserModel user) async {
+  //   await repository.storeUser(user, AppDatabase());
+  // }
 
   bool isAuthLogin() => state.authOption == AuthOption.login;
 }
