@@ -1,3 +1,4 @@
+import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
 import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
 import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
 import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
@@ -19,19 +20,21 @@ void main() async {
   );
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final bool isLogged = prefs.getBool('isLogged') ?? false;
+  final appBloc = AppBloc();
+  final authBloc = AuthBloc(
+    repository: AuthRepository(
+      dao: AuthDao(),
+      service: AuthFirebaseService(),
+    ),
+  );
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AppBloc(),
+          create: (context) => appBloc,
         ),
         BlocProvider(
-          create: (context) => AuthBloc(
-            repository: AuthRepository(
-              dao: AuthDao(),
-              service: AuthFirebaseService(),
-            ),
-          ),
+          create: (context) => authBloc,
         ),
       ],
       child: MyApp(
@@ -57,14 +60,14 @@ class MyApp extends StatelessWidget {
           title: 'Demardo Test',
           darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xfffd383a),
+              seedColor: AppColors.redPrimary,
               brightness: Brightness.dark,
             ),
             useMaterial3: true,
           ),
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xfffd383a),
+              seedColor: AppColors.redPrimary,
               brightness: Brightness.light,
             ),
             useMaterial3: true,

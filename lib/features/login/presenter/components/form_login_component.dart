@@ -15,10 +15,7 @@ import '../../../../core/components/custom_textfield_component.dart';
 class FormLogin extends StatefulWidget {
   const FormLogin({
     super.key,
-    required this.authBloc,
   });
-
-  final AuthBloc authBloc;
 
   @override
   State<FormLogin> createState() => _FormLoginState();
@@ -31,10 +28,11 @@ class _FormLoginState extends State<FormLogin>
   final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
     return BlocProvider(
-      create: (context) => widget.authBloc,
+      create: (context) => authBloc,
       child: BlocConsumer<AuthBloc, IAuthBlocState>(
-        bloc: widget.authBloc,
+        bloc: authBloc,
         listenWhen: (previous, current) => current is IAuthListeners,
         listener: (context, state) {
           if (state is SuccessAuthListener) {
@@ -93,7 +91,7 @@ class _FormLoginState extends State<FormLogin>
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            widget.authBloc.add(
+                            authBloc.add(
                               ChangeOptionAuthBlocEvent(
                                 authOption: AuthOption.login,
                               ),
@@ -106,7 +104,7 @@ class _FormLoginState extends State<FormLogin>
                               horizontal: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: widget.authBloc.isAuthLogin()
+                              color: authBloc.isAuthLogin()
                                   ? Colors.white
                                   : Colors.transparent,
                               borderRadius: const BorderRadius.all(
@@ -116,7 +114,7 @@ class _FormLoginState extends State<FormLogin>
                             child: Center(
                               child: Text(
                                 "Login",
-                                style: widget.authBloc.isAuthLogin()
+                                style: authBloc.isAuthLogin()
                                     ? const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black,
@@ -134,7 +132,7 @@ class _FormLoginState extends State<FormLogin>
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            widget.authBloc.add(
+                            authBloc.add(
                               ChangeOptionAuthBlocEvent(
                                 authOption: AuthOption.register,
                               ),
@@ -147,7 +145,7 @@ class _FormLoginState extends State<FormLogin>
                               horizontal: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: !widget.authBloc.isAuthLogin()
+                              color: !authBloc.isAuthLogin()
                                   ? Colors.white
                                   : Colors.transparent,
                               borderRadius: const BorderRadius.all(
@@ -157,7 +155,7 @@ class _FormLoginState extends State<FormLogin>
                             child: Center(
                               child: Text(
                                 "Registrar",
-                                style: !widget.authBloc.isAuthLogin()
+                                style: !authBloc.isAuthLogin()
                                     ? const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black,

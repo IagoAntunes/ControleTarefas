@@ -14,10 +14,6 @@ import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
 import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
 import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
 import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/page/login_page.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
 import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/event/tasks_list_event.dart';
@@ -46,181 +42,189 @@ class TasksListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.black_200,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const HeadListTasks(),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(32),
-                    topRight: Radius.circular(32),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height,
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              const HeadListTasks(),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                child: BlocProvider(
-                  create: (context) => bloc,
-                  child: BlocBuilder<TasksListBloc, ITaskListBlocState>(
-                    bloc: bloc,
-                    buildWhen: (previous, current) =>
-                        current is IGetTasksListBlocState,
-                    builder: (context, state) {
-                      return switch (state) {
-                        SuccessTasksListBlocState() => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextField(
-                                enabled: !bloc.isListEmpty(),
-                                decoration: const InputDecoration(
-                                  hintText: "Pesquise...",
-                                  prefixIcon: Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
+                    ),
+                    color: Theme.of(context).colorScheme.background,
+                  ),
+                  child: BlocProvider(
+                    create: (context) => bloc,
+                    child: BlocBuilder<TasksListBloc, ITaskListBlocState>(
+                      bloc: bloc,
+                      buildWhen: (previous, current) =>
+                          current is IGetTasksListBlocState,
+                      builder: (context, state) {
+                        return switch (state) {
+                          SuccessTasksListBlocState() => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextField(
+                                  enabled: !bloc.isListEmpty(),
+                                  decoration: const InputDecoration(
+                                    hintText: "Pesquise...",
+                                    prefixIcon: Icon(Icons.search),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
                                     ),
+                                    //
                                   ),
-                                  //
+                                  onChanged: (value) {
+                                    bloc.add(FilterTaskListEvent(text: value));
+                                  },
                                 ),
-                                onChanged: (value) {
-                                  bloc.add(FilterTaskListEvent(text: value));
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              BlocBuilder(
-                                bloc: bloc,
-                                buildWhen: (previous, current) =>
-                                    current is IChangeItemTaskListBlocState,
-                                builder: (context, state) {
-                                  return CarouselTasks(
-                                    listTasks: bloc.selectThreeElements(),
-                                  );
-                                },
-                              ),
-                              BlocBuilder(
-                                bloc: bloc,
-                                buildWhen: (previous, current) =>
-                                    current is ITaskItemListBlocState ||
-                                    current is IChangeItemTaskListBlocState,
-                                builder: (context, state) {
-                                  return Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Tarefas",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
+                                const SizedBox(height: 16),
+                                BlocBuilder(
+                                  bloc: bloc,
+                                  buildWhen: (previous, current) =>
+                                      current is IChangeItemTaskListBlocState,
+                                  builder: (context, state) {
+                                    return CarouselTasks(
+                                      listTasks: bloc.selectThreeElements(),
+                                    );
+                                  },
+                                ),
+                                BlocBuilder(
+                                  bloc: bloc,
+                                  buildWhen: (previous, current) =>
+                                      current is ITaskItemListBlocState ||
+                                      current is IChangeItemTaskListBlocState,
+                                  builder: (context, state) {
+                                    return Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Tarefas",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            children: [
-                                              bloc.filterTasks.isEmpty
-                                                  ? const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 32),
-                                                      child: Center(
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.list,
-                                                              size: 55,
-                                                            ),
-                                                            Text(
-                                                              "Lista vazia",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  fontSize: 24,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            Text(
-                                                              "Adicione uma tarefa para começar",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                fontSize: 16,
+                                          Expanded(
+                                            child: Column(
+                                              children: [
+                                                bloc.filterTasks.isEmpty
+                                                    ? const Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 32),
+                                                        child: Center(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.list,
+                                                                size: 55,
                                                               ),
-                                                            ),
-                                                          ],
+                                                              Text(
+                                                                "Lista vazia",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        24,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              Text(
+                                                                "Adicione uma tarefa para começar",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Expanded(
+                                                        child: ListView.builder(
+                                                          itemCount: bloc
+                                                              .filterTasks
+                                                              .length,
+                                                          itemBuilder: (context,
+                                                                  index) =>
+                                                              TaskItem(
+                                                            task:
+                                                                bloc.filterTasks[
+                                                                    index],
+                                                            onDismissed: (p0) {
+                                                              bloc.add(
+                                                                DeleteTaskListEvent(
+                                                                  task: bloc
+                                                                          .filterTasks[
+                                                                      index],
+                                                                  database:
+                                                                      AppDatabase(),
+                                                                  firestore:
+                                                                      FirebaseFirestore
+                                                                          .instance,
+                                                                ),
+                                                              );
+                                                            },
+                                                            onChagend: (p0) {
+                                                              bloc.add(
+                                                                SelectedTaskListEvent(
+                                                                  index: index,
+                                                                  value: p0!,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                    )
-                                                  : Expanded(
-                                                      child: ListView.builder(
-                                                        itemCount: bloc
-                                                            .filterTasks.length,
-                                                        itemBuilder:
-                                                            (context, index) =>
-                                                                TaskItem(
-                                                          task:
-                                                              bloc.filterTasks[
-                                                                  index],
-                                                          onDismissed: (p0) {
-                                                            bloc.add(
-                                                              DeleteTaskListEvent(
-                                                                task:
-                                                                    bloc.filterTasks[
-                                                                        index],
-                                                                database:
-                                                                    AppDatabase(),
-                                                                firestore:
-                                                                    FirebaseFirestore
-                                                                        .instance,
-                                                              ),
-                                                            );
-                                                          },
-                                                          onChagend: (p0) {
-                                                            bloc.add(
-                                                              SelectedTaskListEvent(
-                                                                index: index,
-                                                                value: p0!,
-                                                              ),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        LoadingTasksListBlocState() => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        FailureTasksListBlocState errorState => FailureWidget(
-                            errorState: errorState.failureState,
-                          ),
-                        _ => Container(),
-                      };
-                    },
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          LoadingTasksListBlocState() => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          FailureTasksListBlocState errorState => FailureWidget(
+                              errorState: errorState.failureState,
+                            ),
+                          _ => Container(),
+                        };
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -414,29 +418,35 @@ class HeadListTasks extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          PopupMenuButton(
-            iconColor: Colors.white,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () {
-                  final authBloc = BlocProvider.of<AuthBloc>(context);
-                  authBloc.add(
-                    LogoutAuthBlocEvent(
-                      authOption: AuthOption.login,
-                      database: AppDatabase(),
-                    ),
-                  );
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                },
-                child: const Text("Sair"),
-              ),
-            ],
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: Colors.white,
+            ),
           ),
+          // PopupMenuButton(
+          //   iconColor: Colors.white,
+          //   itemBuilder: (context) => [
+          //     PopupMenuItem(
+          //       onTap: () async {
+          //         authBloc.add(
+          //           LogoutAuthBlocEvent(
+          //             authOption: AuthOption.login,
+          //             database: AppDatabase(),
+          //           ),
+          //         );
+          //         Navigator.pushReplacement(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const LoginPage(),
+          //           ),
+          //         );
+          //       },
+          //       child: const Text("Sair"),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -603,13 +613,13 @@ class TaskStatus extends StatelessWidget {
         vertical: 4,
       ),
       decoration: BoxDecoration(
-        color: isDone ? const Color(0xffEFFDE8) : const Color(0xFFFDF2E8),
+        color: isDone ? AppColors.greenLight : AppColors.orangeLight,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         isDone ? "Concluido" : "Pendente",
         style: TextStyle(
-          color: isDone ? const Color(0xff398711) : const Color(0xFF877311),
+          color: isDone ? AppColors.greenDark : AppColors.orangeDark,
           fontWeight: FontWeight.bold,
         ),
       ),
