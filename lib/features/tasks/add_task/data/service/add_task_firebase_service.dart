@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/models/task_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../../../core/states/app_service_state.dart';

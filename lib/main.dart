@@ -1,10 +1,10 @@
-import 'package:demarco_teste_pratico/core/theme/app_colors.dart';
-import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
-import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
-import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/page/login_page.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/pages/tasks_list_page.dart';
+import 'package:controle_tarefas/core/theme/app_colors.dart';
+import 'package:controle_tarefas/features/login/data/dao/auth_dao.dart';
+import 'package:controle_tarefas/features/login/data/service/login_firebase_service.dart';
+import 'package:controle_tarefas/features/login/domain/repositories/auth_repository.dart';
+import 'package:controle_tarefas/features/login/presenter/bloc/auth_bloc.dart';
+import 'package:controle_tarefas/features/login/presenter/page/login_page.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/pages/tasks_list_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       bloc: bloc,
       builder: (context, state) {
         return MaterialApp(
-          title: 'Demardo Test',
+          title: 'Tarefas',
           darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: AppColors.redPrimary,

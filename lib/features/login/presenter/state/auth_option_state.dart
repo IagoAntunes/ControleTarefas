@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
+import 'package:controle_tarefas/features/login/presenter/utils/auth_options_enum.dart';
 
 abstract class IAuthBlocState {
   AuthOption authOption;

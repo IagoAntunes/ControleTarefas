@@ -5,14 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/login/domain/models/login_request_model.dart';
-import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/state/auth_option_state.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/login/domain/models/login_request_model.dart';
+import 'package:controle_tarefas/features/login/domain/repositories/auth_repository.dart';
+import 'package:controle_tarefas/features/login/presenter/bloc/auth_bloc.dart';
+import 'package:controle_tarefas/features/login/presenter/event/auth_bloc_event.dart';
+import 'package:controle_tarefas/features/login/presenter/state/auth_option_state.dart';
+import 'package:controle_tarefas/features/login/presenter/utils/auth_options_enum.dart';
 
 import '../../utils/login_utils.dart';
 

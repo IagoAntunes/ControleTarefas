@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
+import 'package:controle_tarefas/core/database/app_database.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/state/task_list_bloc_state.dart';
+import 'package:controle_tarefas/features/login/domain/repositories/auth_repository.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/state/task_list_bloc_state.dart';
 
 import '../event/tasks_list_event.dart';
 

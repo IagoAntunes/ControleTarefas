@@ -1,6 +1,6 @@
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/login/data/dao/auth_dao.dart';
+import 'package:controle_tarefas/core/database/app_database.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/login/data/dao/auth_dao.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

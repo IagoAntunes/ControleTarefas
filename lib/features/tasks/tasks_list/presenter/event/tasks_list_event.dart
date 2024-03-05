@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:controle_tarefas/core/database/app_database.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/models/task_model.dart';
 
 abstract class ITaskListEvent {}
 

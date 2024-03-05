@@ -1,4 +1,4 @@
-package com.example.demarco_teste_pratico
+package com.example.controle_tarefas
 
 import io.flutter.embedding.android.FlutterActivity
 

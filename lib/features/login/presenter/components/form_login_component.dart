@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/bloc/auth_bloc.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/state/auth_option_state.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/pages/tasks_list_page.dart';
+import 'package:controle_tarefas/core/database/app_database.dart';
+import 'package:controle_tarefas/features/login/presenter/bloc/auth_bloc.dart';
+import 'package:controle_tarefas/features/login/presenter/event/auth_bloc_event.dart';
+import 'package:controle_tarefas/features/login/presenter/state/auth_option_state.dart';
+import 'package:controle_tarefas/features/login/presenter/utils/auth_options_enum.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/pages/tasks_list_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

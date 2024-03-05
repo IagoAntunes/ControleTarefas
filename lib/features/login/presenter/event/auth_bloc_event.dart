@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:demarco_teste_pratico/core/database/app_database.dart';
+import 'package:controle_tarefas/core/database/app_database.dart';
 
 import '../utils/auth_options_enum.dart';
 

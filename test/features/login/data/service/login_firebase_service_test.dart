@@ -1,6 +1,6 @@
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
-import 'package:demarco_teste_pratico/features/login/domain/models/login_request_model.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/login/data/service/login_firebase_service.dart';
+import 'package:controle_tarefas/features/login/domain/models/login_request_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

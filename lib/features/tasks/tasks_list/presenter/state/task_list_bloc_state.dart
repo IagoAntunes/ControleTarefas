@@ -1,4 +1,4 @@
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
 
 abstract class ITaskListBlocState {}
 

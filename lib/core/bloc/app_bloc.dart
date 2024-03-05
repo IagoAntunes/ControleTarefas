@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:demarco_teste_pratico/core/bloc/states/app_bloc_state.dart';
+import 'package:controle_tarefas/core/bloc/states/app_bloc_state.dart';
 
 import 'events/app_bloc_event.dart';
 

@@ -1,8 +1,8 @@
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/event/auth_bloc_event.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/state/auth_option_state.dart';
-import 'package:demarco_teste_pratico/features/login/presenter/utils/auth_options_enum.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/login/presenter/event/auth_bloc_event.dart';
+import 'package:controle_tarefas/features/login/presenter/state/auth_option_state.dart';
+import 'package:controle_tarefas/features/login/presenter/utils/auth_options_enum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

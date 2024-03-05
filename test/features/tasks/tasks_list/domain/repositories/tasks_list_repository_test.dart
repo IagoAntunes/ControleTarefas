@@ -1,9 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

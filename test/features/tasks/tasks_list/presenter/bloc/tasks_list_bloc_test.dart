@@ -1,14 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
-import 'package:demarco_teste_pratico/core/states/app_service_state.dart';
-import 'package:demarco_teste_pratico/features/login/data/service/login_firebase_service.dart';
-import 'package:demarco_teste_pratico/features/login/domain/repositories/auth_repository.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/models/task_model.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/bloc/tasks_list_bloc.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/event/tasks_list_event.dart';
-import 'package:demarco_teste_pratico/features/tasks/tasks_list/presenter/state/task_list_bloc_state.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
+import 'package:controle_tarefas/core/states/app_service_state.dart';
+import 'package:controle_tarefas/features/login/data/service/login_firebase_service.dart';
+import 'package:controle_tarefas/features/login/domain/repositories/auth_repository.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/data/service/tasks_list_firebase_service.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/models/task_model.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/domain/repositories/tasks_list_repository.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/bloc/tasks_list_bloc.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/event/tasks_list_event.dart';
+import 'package:controle_tarefas/features/tasks/tasks_list/presenter/state/task_list_bloc_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

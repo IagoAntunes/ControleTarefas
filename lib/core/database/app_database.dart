@@ -1,4 +1,4 @@
-import 'package:demarco_teste_pratico/core/models/user_model.dart';
+import 'package:controle_tarefas/core/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabase {
