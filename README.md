@@ -47,4 +47,27 @@ flutter test
 
 ### Arquitetura do Banco(Firestore)
 [<img align="left" alt="Warpnet" src="https://github.com/IagoAntunes/tasks_app/blob/main/assets/github/database_tables_firestore_app.png"/>](ArquiteturaDatabase)
-  
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+### Telas do App
+
+[<img  height="800px" width="380px" alt="Warpnet"  src="https://github.com/IagoAntunes/tasks_app/blob/main/assets/github/app_login_page.png"/>](TelaLogin)
+[<img  height="800px" width="380px" alt="Warpnet"  src="https://github.com/IagoAntunes/tasks_app/blob/main/assets/github/app_tasksList_page.png"/>](TelaLogin)
+[<img  height="800px" width="380px" alt="Warpnet"  src="https://github.com/IagoAntunes/tasks_app/blob/main/assets/github/app_add_page.png"/>](TelaListaTarefas)
