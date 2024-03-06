@@ -70,7 +70,6 @@ class TasksListPage extends StatelessWidget {
                       buildWhen: (previous, current) =>
                           current is IGetTasksListBlocState,
                       builder: (context, state) {
-                        print("PAI -> ${bloc.state}");
                         return switch (state) {
                           SuccessTasksListBlocState() => Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +96,6 @@ class TasksListPage extends StatelessWidget {
                                   buildWhen: (previous, current) =>
                                       current is IChangeItemTaskListBlocState,
                                   builder: (context, state) {
-                                    print(bloc.state);
                                     return CarouselTasks(
                                       listTasks: bloc.selectThreeElements(),
                                     );
