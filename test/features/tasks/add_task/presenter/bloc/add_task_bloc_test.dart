@@ -64,6 +64,7 @@ void main() {
 
         bloc.add(SelectImageEvent(
           imagePicker: mockImagePicker,
+          imageOption: PickImage.camera,
         ));
       },
     );

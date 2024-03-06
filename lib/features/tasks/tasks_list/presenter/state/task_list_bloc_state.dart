@@ -27,6 +27,8 @@ class SelectedTaskListBlocState extends ITaskItemListBlocState {}
 
 class EmptyTaskListBlocState extends ITaskItemListBlocState {}
 
+class FilteredListBlocState extends ITaskItemListBlocState {}
+
 //ADD
 abstract class IChangeItemTaskListBlocState extends ITaskListBlocState {}
 

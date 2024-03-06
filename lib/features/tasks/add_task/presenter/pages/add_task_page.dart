@@ -182,9 +182,60 @@ class AddTaskPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        bloc.add(
-                          SelectImageEvent(
-                            imagePicker: ImagePicker(),
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => IntrinsicHeight(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  ListTile(
+                                    onTap: () {
+                                      bloc.add(
+                                        SelectImageEvent(
+                                          imagePicker: ImagePicker(),
+                                          imageOption: PickImage.camera,
+                                        ),
+                                      );
+                                      Navigator.pop(context);
+                                    },
+                                    leading: const Icon(Icons.camera_alt),
+                                    title: const Text("Camera"),
+                                  ),
+                                  const Divider(),
+                                  ListTile(
+                                    onTap: () {
+                                      bloc.add(
+                                        SelectImageEvent(
+                                          imagePicker: ImagePicker(),
+                                          imageOption: PickImage.gallery,
+                                        ),
+                                      );
+                                      Navigator.pop(context);
+                                    },
+                                    leading: const Icon(Icons.photo_library),
+                                    title: const Text("Galeria"),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },

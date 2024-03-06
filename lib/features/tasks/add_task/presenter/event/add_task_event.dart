@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:controle_tarefas/features/tasks/add_task/presenter/bloc/add_task_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,7 +29,9 @@ class AddDateTaskEvent extends IAddTaskEvent {
 
 class SelectImageEvent extends IAddTaskEvent {
   ImagePicker imagePicker;
+  PickImage imageOption;
   SelectImageEvent({
     required this.imagePicker,
+    required this.imageOption,
   });
 }

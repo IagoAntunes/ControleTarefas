@@ -33,11 +33,14 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
     required this.connectivity,
     this.initGet = true,
   }) : super(IdleTaskListBlocState()) {
+    // GetTasksListEvent | Receber lista de tarefas
     on<GetTasksListEvent>((event, emit) async {
       emit(LoadingTasksListBlocState());
       late IServiceState result;
+      //Pegar uid do usuario logado
       result = await authRepository.getUser(event.database);
       if (result is SuccessServiceState) {
+        //Requisição para receberr lista tarefas
         final data = await repository.getTasks(
           result.data,
           event.firestore,
@@ -52,6 +55,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
               listTasks.add(TaskModel.fromMap(item));
             }
             filterTasks.addAll(listTasks);
+            //Pegar imagens da atividade
             final resultImages = await repository.getImages(
               result.data,
               event.firestore,
@@ -78,6 +82,8 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
         emit(FailureTasksListBlocState(failureState: result));
       }
     });
+
+    //DeleteTaskListEvent | Deletar atividade
     on<DeleteTaskListEvent>((event, emit) async {
       listTasks.removeWhere((element) => element.id == event.task.id);
       filterTasks.removeWhere((element) => element.id == event.task.id);
@@ -93,6 +99,8 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
         }
       }
     });
+
+    //SelectedTaskListEvent | Selecionar atividade
     on<SelectedTaskListEvent>((event, emit) {
       filterTasks[event.index].isChecked = event.value;
       if (filterTasks
@@ -107,6 +115,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       }
       emit(SelectedTaskListBlocState());
     });
+    //DoneTasksListEvent | Concluir tividade ja selecionada
     on<DoneTasksListEvent>((event, emit) async {
       for (var element in listTasks) {
         if (element.isChecked == true) {
@@ -115,8 +124,10 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       }
       filterTasks.clear();
       filterTasks.addAll(listTasks);
+      //Pegar uid do usuario logado
       final result = await authRepository.getUser(event.database);
       if (result is SuccessServiceState) {
+        //Requisição para concluir tarefa
         final result2 = await repository.completeTasks(
           result.data,
           listTasks,
@@ -137,6 +148,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
         }
       }
     });
+    //FilterTasksListEvent | Filtrar lista de tarefas
     on<FilterTaskListEvent>((event, emit) {
       filterTasks.clear();
       filterTasks.addAll(
@@ -146,8 +158,9 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
         ),
       );
 
-      emit(SuccessTasksListBlocState());
+      emit(FilteredListBlocState());
     });
+    //AddTaskListEvent | Adicionar Tarefa
     on<AddTaskListEvent>((event, emit) {
       listTasks.add(event.task);
       filterTasks.add(event.task);
@@ -163,6 +176,7 @@ class TasksListBloc extends Bloc<ITaskListEvent, ITaskListBlocState> {
       ));
     }
   }
+  //Logica para selecionar as 3 primeiras tarefas
   List<TaskModel> selectThreeElements() {
     var list = listTasks.where((element) => element.isDone == false).toList();
     if (list.length >= 3) {

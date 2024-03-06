@@ -70,6 +70,7 @@ class TasksListPage extends StatelessWidget {
                       buildWhen: (previous, current) =>
                           current is IGetTasksListBlocState,
                       builder: (context, state) {
+                        print("PAI -> ${bloc.state}");
                         return switch (state) {
                           SuccessTasksListBlocState() => Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,6 +97,7 @@ class TasksListPage extends StatelessWidget {
                                   buildWhen: (previous, current) =>
                                       current is IChangeItemTaskListBlocState,
                                   builder: (context, state) {
+                                    print(bloc.state);
                                     return CarouselTasks(
                                       listTasks: bloc.selectThreeElements(),
                                     );
@@ -165,38 +167,50 @@ class TasksListPage extends StatelessWidget {
                                                         ),
                                                       )
                                                     : Expanded(
-                                                        child: ListView.builder(
-                                                          itemCount: bloc
-                                                              .filterTasks
-                                                              .length,
-                                                          itemBuilder: (context,
-                                                                  index) =>
-                                                              TaskItem(
-                                                            task:
-                                                                bloc.filterTasks[
-                                                                    index],
-                                                            onDismissed: (p0) {
-                                                              bloc.add(
-                                                                DeleteTaskListEvent(
-                                                                  task: bloc
-                                                                          .filterTasks[
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 60),
+                                                          child:
+                                                              ListView.builder(
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            itemCount: bloc
+                                                                .filterTasks
+                                                                .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                        index) =>
+                                                                    TaskItem(
+                                                              task:
+                                                                  bloc.filterTasks[
                                                                       index],
-                                                                  database:
-                                                                      AppDatabase(),
-                                                                  firestore:
-                                                                      FirebaseFirestore
-                                                                          .instance,
-                                                                ),
-                                                              );
-                                                            },
-                                                            onChagend: (p0) {
-                                                              bloc.add(
-                                                                SelectedTaskListEvent(
-                                                                  index: index,
-                                                                  value: p0!,
-                                                                ),
-                                                              );
-                                                            },
+                                                              onDismissed:
+                                                                  (p0) {
+                                                                bloc.add(
+                                                                  DeleteTaskListEvent(
+                                                                    task: bloc
+                                                                            .filterTasks[
+                                                                        index],
+                                                                    database:
+                                                                        AppDatabase(),
+                                                                    firestore:
+                                                                        FirebaseFirestore
+                                                                            .instance,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              onChagend: (p0) {
+                                                                bloc.add(
+                                                                  SelectedTaskListEvent(
+                                                                    index:
+                                                                        index,
+                                                                    value: p0!,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
                                                           ),
                                                         ),
                                                       ),

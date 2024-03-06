@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
+enum PickImage { camera, gallery }
+
 class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
   IAddTaskRepository repository;
   IAuthRepository authRepository;
@@ -19,14 +21,18 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
     required this.authRepository,
   }) : super(IdleTaskState()) {
     taskModel = TaskModel.empty();
+    //AddDateTaskEvent | Setar data da tarefa
     on<AddDateTaskEvent>((event, emit) {
       taskModel.date = event.date;
     });
+    //SelectImageEvent | Selecionar imagem(camera|galeria)
     on<SelectImageEvent>(
       (event, emit) async {
         String? resultImage;
-        XFile? image =
-            await event.imagePicker.pickImage(source: ImageSource.camera);
+        XFile? image = await event.imagePicker.pickImage(
+            source: event.imageOption == PickImage.camera
+                ? ImageSource.camera
+                : ImageSource.gallery);
         if (image != null) {
           final imageTemporary = XFile(image.path);
 
@@ -41,14 +47,17 @@ class AddTaskBloc extends Bloc<IAddTaskEvent, IAddTaskState> {
         }
       },
     );
+    //AddTaskEvent | Adicionar Tarefa
     on<AddTaskEvent>(
       (event, emit) async {
         emit(LoadingAddTaskListener());
         taskModel.title = event.nameTask;
+        //Pegar uid do usuario logado
         final result = await authRepository.getUser(event.database);
         if (result is SuccessServiceState<UserModel>) {
           UserModel user = result.data;
           taskModel.id = const Uuid().v1();
+          //Requisição para adicionar tarefa
           final result2 = await repository.addTask(
             taskModel,
             user,

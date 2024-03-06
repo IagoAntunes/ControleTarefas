@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
   AuthBloc({
     required this.repository,
   }) : super(LoginAuthOptionState()) {
+    //ChangeOptionAuthBlocEvent | Alterar opção Login-Registro
     on<ChangeOptionAuthBlocEvent>((event, emit) {
       if (event.authOption == AuthOption.login) {
         emit(LoginAuthOptionState());
@@ -22,22 +23,26 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
         emit(RegisterAuthOptionState());
       }
     });
+    //LoginLoginBlocEvent | Realiar login
     on<LoginLoginBlocEvent>((event, emit) async {
       emit(LoadingLoginBlocState());
       var request = LoginRequestModel(
         email: event.email,
         password: event.password,
       );
+      //Requisição para realizar LOGIN
       IServiceState result = await repository.login(
         request,
         event.firebaseAuth,
       );
       if (result is SuccessServiceState<UserCredential>) {
+        //Guardar estado do usuario logado
         await event.shared.setBool('isLogged', true);
         var user = UserModel(
           uid: result.data.user!.uid,
           email: result.data.user!.email!,
         );
+        //Guardar estado do usuario logado
         await repository.storeUser(user, event.database);
         emit(SuccessAuthListener(authOption: state.authOption));
       } else if (result is FailureServiceState) {
@@ -48,25 +53,28 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
         emit(FailureLoginState(message: result.message));
       }
     });
-
+    //CreateAuthBlocEvent | Registrar usuario
     on<CreateAuthBlocEvent>((event, emit) async {
       emit(LoadingLoginBlocState());
       var request = LoginRequestModel(
         email: event.email,
         password: event.password,
       );
+
+      //Requisição para criar conta usuario
       final result = await repository.createAccount(
         request,
         event.firebaseAuth,
         event.firestore,
       );
       if (result is SuccessServiceState) {
+        //Guardar estado do usuario
         await event.shared.setBool('isLogged', true);
         var user = UserModel(
           uid: result.data.user!.uid,
           email: result.data.user!.email!,
         );
-
+        //Guardar estado do usuario
         await repository.storeUser(user, event.database);
         emit(SuccessAuthListener(authOption: state.authOption));
         emit(LoggedLoginState());
@@ -78,7 +86,9 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
         emit(FailureLoginState(message: result.message));
       } else {}
     });
+    //LogoutAuthBlocEvent | Deslogar usuario
     on<LogoutAuthBlocEvent>((event, emit) async {
+      //Requisição para deslogar usuario
       final result = await repository.logout(event.database);
       if (result is SuccessServiceState) {
         emit(LogoutAuthListener(authOption: AuthOption.login));
@@ -92,7 +102,7 @@ class AuthBloc extends Bloc<IAuthBlocEvent, IAuthBlocState> {
       }
     });
   }
-
+  //Verificar se usuario esta logado
   Future<void> userLogged(bool value, SharedPreferences shared) async {
     await shared.setBool('isLogged', value);
   }

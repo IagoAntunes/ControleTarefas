@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.controle_tarefas">
     <application
-        android:label="controle_tarefas"
+        android:label="Tarefas"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -258,7 +258,7 @@ void main() {
           );
         },
         expect: () => [
-          isA<SuccessTasksListBlocState>(),
+          isA<FilteredListBlocState>(),
         ],
       );
     });
