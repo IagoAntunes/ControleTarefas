@@ -56,6 +56,7 @@ flutter test
 - Aplicativo: Flutter
 - BackEnd/Banco: Firebase/Firestore
 - Autenticação: Firebase Authentication
+- CI: Github Actions/[CodeMagic](https://codemagic.io/start/)
 - [**firebase_core**](https://pub.dev/packages/firebase_core)
 - [**firebase_auth**](https://pub.dev/packages/firebase_auth)
 - [**firebase_storage**](https://pub.dev/packages/firebase_storage)
